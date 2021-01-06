@@ -12,8 +12,6 @@ namespace detail {
  *
  * It will configure the eQep module of the pwm subsystem to use
  * Quadrature-count mode and capture the position count every unit time.
- * New data is available when
- *
  */
 template<uint16_t QCAPCTL, uint32_t QUPRD>
 class EQepPositionEncoder

@@ -27,5 +27,4 @@ struct EQepPositionEncoder1 : public detail::EQepPositionEncoder<QCAPCTL, QUPRD>
     }
 };
 
-
 #endif // EQEP_POSITION_ENCODER_1_HPP

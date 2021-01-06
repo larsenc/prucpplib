@@ -26,7 +26,6 @@ public:
     }
 };
 
-
 // P8 - Mode 5
 typedef GPIOOutput<15>  pru0_P8_11_out;
 typedef GPIOOutput<14>  pru0_P8_12_out;
