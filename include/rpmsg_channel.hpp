@@ -7,6 +7,8 @@
 
 #include "register_31.hpp"
 
+namespace prucpp {
+
 /*
  * Used to make sure the Linux drivers are ready for RPMsg communication
  * Found at linux-x.y.z/include/uapi/linux/virtio_config.h
@@ -102,5 +104,7 @@ private:
     uint16_t                        destination_;
     uint16_t                        payload_length_;
 };
+
+} // namespace prucpp
 
 #endif // RPMSG_CHANNEL_HPP

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+namespace prucpp {
+
 template<typename TDerived, uint8_t GPIO_MASK>
 class GPIO
 {
@@ -24,5 +26,7 @@ public:
         return derived.getRegister();
     }
 };
+
+} // namespace prucpp
 
 #endif // GPIO_HPP

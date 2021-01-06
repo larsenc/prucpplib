@@ -6,6 +6,8 @@
 #include "gpio.hpp"
 #include "register_30.hpp"
 
+namespace prucpp {
+
 template<uint8_t GPIO_MASK>
 class GPIOOutput : public GPIO<GPIOOutput<GPIO_MASK>, GPIO_MASK>
 {
@@ -63,5 +65,7 @@ typedef GPIOOutput<4>   pru0_P9_42B_out;
 
 //typedef GPIOOutput<15> pru1_na_out;
 //typedef GPIOOutput<14> pru1_na_in;
+
+} // namespace prucpp
 
 #endif // GPIO_OUTPUT_HPP

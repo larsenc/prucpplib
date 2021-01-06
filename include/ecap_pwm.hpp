@@ -3,6 +3,8 @@
 
 #include <pru_ecap.h>
 
+namespace prucpp {
+
 // Predefined PWM cycles
 #define CYCLE_24_41_kHz   0x2000  // 24.41 kHz
 #define CYCLE_48_82_kHz   0x1000  // 48.82 kHz
@@ -36,5 +38,7 @@ struct ECAPPWM
         CT_ECAP.CAP2_bit.CAP2 = period;
     }
 };
+
+} // namespace prucpp
 
 #endif // ECAPPWM_H

@@ -5,6 +5,8 @@
 
 #include "eqep_position_encoder.hpp"
 
+namespace prucpp {
+
 #define CM_PER_EPWMSS1 (*((volatile unsigned int *)0x44E000CC))
 
 /*
@@ -26,5 +28,7 @@ struct EQepPositionEncoder1 : public detail::EQepPositionEncoder<QCAPCTL, QUPRD>
         }
     }
 };
+
+} // namespace prucpp
 
 #endif // EQEP_POSITION_ENCODER_1_HPP

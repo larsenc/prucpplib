@@ -5,6 +5,8 @@
 
 #include "rpmsg_channel.hpp"
 
+namespace prucpp {
+
 // These could be moved to pru1_resource_table.h
 #define PRU0_TO_ARM_HOST    16
 #define PRU0_FROM_ARM_HOST  17
@@ -22,5 +24,7 @@ struct PRU0RPMsgChannel : RPMsgChannel<TSharedStruct, PRU0_TO_ARM_HOST, PRU0_FRO
                 rpmsg_vring1)
     {}
 };
+
+} // namespace prucpp
 
 #endif // PRU0_RPMSG_CHANNEL_H

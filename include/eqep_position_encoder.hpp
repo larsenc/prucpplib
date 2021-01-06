@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <sys_pwmss.h>
 
+namespace prucpp {
 namespace detail {
 
 /*
@@ -113,5 +114,6 @@ private:
 };
 
 } // namespace detail
+} // namespace prucpp
 
 #endif // EQEP_POSITION_ENCODER_HPP

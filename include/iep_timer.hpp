@@ -3,6 +3,8 @@
 
 #include "pru_iep.h"
 
+namespace prucpp {
+
 /**
  * The IEPTimer implements a simple timer using the IEP peripheral.
  *
@@ -40,5 +42,7 @@ private:
         CT_IEP.TMR_GLB_CFG = 0x11;
     }
 };
+
+} // namespace prucpp
 
 #endif // IEP_TIMER_HPP
