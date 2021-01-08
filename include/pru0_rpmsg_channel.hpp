@@ -7,7 +7,7 @@
 
 namespace prucpp {
 
-// These could be moved to pru1_resource_table.h
+// These could be moved to pru0_resource_table.h
 #define PRU0_TO_ARM_HOST    16
 #define PRU0_FROM_ARM_HOST  17
 #define PRU0_CHANNEL_PORT   30
