@@ -1,5 +1,5 @@
-#ifndef ECAPPWM_H
-#define ECAPPWM_H
+#ifndef ECAP_PWM_H
+#define ECAP_PWM_H
 
 #include <pru_ecap.h>
 
@@ -17,7 +17,7 @@ namespace prucpp {
  * Before loading and running the firmware that uses this class, call
  * configure pin 9_42: "$ config-pin -a P9_42 pru_ecap"
 */
-template<uint16_t CYCLE>
+template<uint32_t PERIOD>
 struct ECAPPWM
 {
     ECAPPWM()
@@ -26,19 +26,23 @@ struct ECAPPWM
         // Set polarity to active high
         CT_ECAP.ECCTL2 = 0x02C0;
 
-        // Set number of clock cycles in a PWM period (APRD)
-        CT_ECAP.CAP1 = CYCLE;
+        // Set number of clock cycles in the PWM period
+        CT_ECAP.CAP1 = PERIOD;
 
-        // Enable ECAP PWM Freerun counter
+        // Enable ECAP PWM freerun counter
         CT_ECAP.ECCTL2 |= 0x0010;
     }
 
-    void setPeriod(uint16_t period)
+    /*
+     * Set the duty cycle by specifying number of cycles the signal is high during a period.
+     * The duty cycle is equal to: numCyclesHigh/PERIOD
+     */
+    void setDutyCycle(uint32_t numCyclesHigh)
     {
-        CT_ECAP.CAP2_bit.CAP2 = period;
+        CT_ECAP.CAP2 = numCyclesHigh;
     }
 };
 
 } // namespace prucpp
 
-#endif // ECAPPWM_H
+#endif // ECAP_PWM_H

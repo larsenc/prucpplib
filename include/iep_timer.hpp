@@ -8,12 +8,12 @@ namespace prucpp {
 /**
  * The IEPTimer implements a simple timer using the IEP peripheral.
  *
- * The IEPTimer makes sure that CYCLE_LENGTH(5 ns) cycles elapses between consecutive calls to IEPTimer::throttle()
+ * The IEPTimer makes sure that the PERIOD amount of cycles(5 ns) elapses between consecutive calls to IEPTimer::throttle()
  *
  * Limitation: I suspect there will be issues if one tries to use an instance of the IEPTimer class in both PRUs
  *             since they are acting on the same IEP registers.
  */
-template<uint32_t CYCLE_LENGTH>
+template<uint32_t PERIOD>
 class IEPTimer
 {
 public:
@@ -24,8 +24,8 @@ public:
 
     void throttle()
     {
-        // Loop until desired count has passed.
-        while(CT_IEP.TMR_CNT <= CYCLE_LENGTH) {}
+        // Loop until desired PERIOD has passed.
+        while(CT_IEP.TMR_CNT <= PERIOD) {}
 
         resetCounter();
     }
