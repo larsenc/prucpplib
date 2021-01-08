@@ -20,7 +20,7 @@ namespace prucpp {
 template<uint32_t PERIOD>
 struct ECAPPWM
 {
-    ECAPPWM()
+    ECAPPWM(uint32_t numCyclesHigh = 0)
     {
         // Enable APWM mode and enable asynchronous operation
         // Set polarity to active high
@@ -31,6 +31,9 @@ struct ECAPPWM
 
         // Enable ECAP PWM freerun counter
         CT_ECAP.ECCTL2 |= 0x0010;
+
+        // Set the duty cycle
+        CT_ECAP.CAP2 = numCyclesHigh;
     }
 
     /*
