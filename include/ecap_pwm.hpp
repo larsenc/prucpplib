@@ -5,11 +5,6 @@
 
 namespace prucpp {
 
-// Predefined PWM cycles
-#define CYCLE_24_41_kHz   0x2000  // 24.41 kHz
-#define CYCLE_48_82_kHz   0x1000  // 48.82 kHz
-#define CYCLE_97_66_kHz   0x800   // 97.66 kHz
-
 /*
  * The ECAPPWM class wraps PWM functionality from the eCap0 peripheral.
  *
