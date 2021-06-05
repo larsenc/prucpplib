@@ -5,7 +5,7 @@
 #include <pru_intc.h>
 #include <rsc_types.h>
 
-#include "register_31.hpp"
+#include "prucpplib/register_31.hpp"
 
 namespace prucpp {
 

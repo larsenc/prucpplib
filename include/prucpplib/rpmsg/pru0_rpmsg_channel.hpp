@@ -3,7 +3,7 @@
 
 #include <rsc_types.h>
 
-#include "rpmsg_channel.hpp"
+#include "prucpplib/rpmsg/rpmsg_channel.hpp"
 
 namespace prucpp {
 

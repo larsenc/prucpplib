@@ -1,8 +1,8 @@
 #ifndef PRU1_GPIO_HPP
 #define PRU1_GPIO_HPP
 
-#include "gpio_input.hpp"
-#include "gpio_output.hpp"
+#include "prucpplib/gpio/gpio_input.hpp"
+#include "prucpplib/gpio/gpio_output.hpp"
 
 namespace prucpp {
 

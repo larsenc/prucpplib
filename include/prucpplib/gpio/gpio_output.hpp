@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#include "gpio.hpp"
-#include "register_30.hpp"
+#include "prucpplib/gpio/gpio.hpp"
+#include "prucpplib/register_30.hpp"
 
 namespace prucpp {
 

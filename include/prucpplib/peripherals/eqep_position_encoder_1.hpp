@@ -3,7 +3,7 @@
 
 #include <sys_pwmss.h>
 
-#include "eqep_position_encoder.hpp"
+#include "prucpplib/peripherals/eqep_position_encoder.hpp"
 
 namespace prucpp {
 

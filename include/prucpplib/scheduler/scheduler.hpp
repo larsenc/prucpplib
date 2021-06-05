@@ -1,10 +1,9 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "static_assert.hpp"
+#include "prucpplib/static_assert.hpp"
 
 namespace prucpp {
-namespace scheduler {
 
 struct Task
 {
@@ -43,7 +42,6 @@ inline void run(TTimer& timer, TTask (&tasks)[NUM_TASKS])
     }
 }
 
-} // namespace scheduler
 } // namespace prucpp
 
 #endif // SCHEDULER_H
