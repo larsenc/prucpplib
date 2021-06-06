@@ -5,6 +5,7 @@
 #include "prucpplib/gpio/gpio_output.hpp"
 
 namespace prucpp {
+namespace beaglebone_black {
 
 /**
  *  PRU0 Inputs
@@ -46,6 +47,7 @@ typedef GPIOOutput<0>   pru0_P9_31_out;
 typedef GPIOOutput<6>   pru0_P9_41B_out;
 typedef GPIOOutput<4>   pru0_P9_42B_out;
 
+} // beaglebone_black
 } // namespace prucpp
 
 #endif // PRU0_GPIO_HPP
