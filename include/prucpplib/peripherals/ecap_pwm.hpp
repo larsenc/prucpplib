@@ -8,10 +8,10 @@ namespace prucpp {
 /*
  * The ECAPPWM class wraps PWM functionality from the eCap0 peripheral.
  *
- * It uses pin 9_42 configured in MUX_MODE3/pru_ecap.
- * Before loading and running the firmware that uses this class, call
- * configure pin 9_42: "$ config-pin -a P9_42 pru_ecap"
-*/
+ * Beaglebone black uses pins:
+ *      - P9_42 : mode 3 - pru_ecap
+ */
+
 template<uint32_t PERIOD>
 struct ECAPPWM
 {

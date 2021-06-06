@@ -12,7 +12,7 @@ namespace prucpp {
 /*
  * Position encoder abstraction using the eQep module of PWMSS1
  *
- * Uses pins:
+ * Beaglebone black uses pins:
  *      - P8_33 : mode 2
  *      - P8_35 : mode 2
  */
