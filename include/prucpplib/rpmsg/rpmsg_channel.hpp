@@ -1,8 +1,8 @@
 #ifndef RPMSG_CHANNEL_HPP
 #define RPMSG_CHANNEL_HPP
 
-#include <pru_rpmsg.h>
 #include <pru_intc.h>
+#include <pru_rpmsg.h>
 #include <rsc_types.h>
 
 #include "prucpplib/register_31.hpp"

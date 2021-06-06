@@ -1,8 +1,8 @@
 #ifndef EQEP_POSITION_ENCODER_HPP
 #define EQEP_POSITION_ENCODER_HPP
 
-#include <stdint.h>
 #include <limits.h>
+#include <stdint.h>
 #include <sys_pwmss.h>
 
 namespace prucpp {

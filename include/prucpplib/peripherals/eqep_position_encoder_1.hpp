@@ -1,9 +1,9 @@
 #ifndef EQEP_POSITION_ENCODER_1_HPP
 #define EQEP_POSITION_ENCODER_1_HPP
 
-#include <sys_pwmss.h>
-
 #include "prucpplib/peripherals/eqep_position_encoder.hpp"
+
+#include <sys_pwmss.h>
 
 namespace prucpp {
 

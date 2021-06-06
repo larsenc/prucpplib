@@ -1,9 +1,9 @@
 #ifndef PRU1_RPMSG_CHANNEL_H
 #define PRU1_RPMSG_CHANNEL_H
 
-#include <rsc_types.h>
-
 #include "prucpplib/rpmsg/rpmsg_channel.hpp"
+
+#include <rsc_types.h>
 
 namespace prucpp {
 
