@@ -1,7 +1,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "prucpplib/static_assert.hpp"
+#include "prucpplib/util/static_assert.hpp"
 
 namespace prucpp {
 
