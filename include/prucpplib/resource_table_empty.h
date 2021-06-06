@@ -59,9 +59,6 @@ struct my_resource_table {
 	uint32_t offset[1]; /* Should match 'num' in actual definition */
 };
 
-
-// http://www.ti.com/lit/ug/spruhv7c/spruhv7c.pdf
-//#pragma DATA_SECTION(pru_remoteproc_ResourceTable, ".resource_table") // c style
 #pragma DATA_SECTION(".resource_table") // c++style
 
 #pragma RETAIN // c++style
