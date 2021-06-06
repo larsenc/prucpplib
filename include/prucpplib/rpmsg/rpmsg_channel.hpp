@@ -1,11 +1,11 @@
 #ifndef RPMSG_CHANNEL_HPP
 #define RPMSG_CHANNEL_HPP
 
+#include "prucpplib/register_31.hpp"
+
 #include <pru_intc.h>
 #include <pru_rpmsg.h>
 #include <rsc_types.h>
-
-#include "prucpplib/register_31.hpp"
 
 namespace prucpp {
 
@@ -22,8 +22,8 @@ namespace detail {
     template<typename TSharedStruct>
     union RPMsg
     {
-        char            payload_[sizeof(TSharedStruct)];
-        TSharedStruct   shared_struct_;
+        char            payload[sizeof(TSharedStruct)];
+        TSharedStruct   sharedStruct;
     };
 
 } // namespace detail
@@ -35,74 +35,70 @@ template<typename TSharedStruct, uint8_t TO_ARM_HOST, uint8_t FROM_ARM_HOST, uin
 class RPMsgChannel
 {
 public:
-    typedef void(*Callback)(TSharedStruct&);
+    typedef void(*OnMsgReceived)(TSharedStruct&);
 
-    RPMsgChannel(const char* channel_description, fw_rsc_vdev& rpmsg_vdev, fw_rsc_vdev_vring& rpmsg_vring0, fw_rsc_vdev_vring& rpmsg_vring1)
+    RPMsgChannel(const char* channelDescription, fw_rsc_vdev& rpmsg_vdev, fw_rsc_vdev_vring& rpmsg_vring0, fw_rsc_vdev_vring& rpmsg_vring1)
+        : mRPMsg(new detail::RPMsg<TSharedStruct>)
     {
-        rp_msg_ = new detail::RPMsg<TSharedStruct>;
+        clearEventStatus();
 
-        /*
-         * Clear the status of the PRU-ICSS system event that the ARM will
-         * use to 'kick' us
-         */
-        CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
-
-        /* Make sure the Linux drivers are ready for RPMsg communication */
+        // Make sure the Linux drivers are ready for RPMsg communication
         volatile uint8_t* status = &rpmsg_vdev.status;
-        while (!(*status & VIRTIO_CONFIG_S_DRIVER_OK)) {
-            /* Optional: implement timeout logic */
-        };
+        while (!(*status & VIRTIO_CONFIG_S_DRIVER_OK)) {};
 
-        /* Initialize the RPMsg transport structure */
-        pru_rpmsg_init(&transport_, &rpmsg_vring0, &rpmsg_vring1, TO_ARM_HOST, FROM_ARM_HOST);
+        // Initialize the RPMsg transport
+        pru_rpmsg_init(&mTransport, &rpmsg_vring0, &rpmsg_vring1, TO_ARM_HOST, FROM_ARM_HOST);
 
-        /*
-         * Create the RPMsg channel between the PRU and ARM user space using
-         * the transport structure.
-         */
-        while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport_, const_cast<char*>(CHANNEL_NAME), const_cast<char*>(channel_description), CHANNEL_PORT)
-                != PRU_RPMSG_SUCCESS) {
-            /* Optional: implement timeout logic */
-        };
+        // Create the RPMsg channel between the PRU and ARM user space using the transport structure.
+        while (pru_rpmsg_channel(RPMSG_NS_CREATE, &mTransport, const_cast<char*>(CHANNEL_NAME), const_cast<char*>(channelDescription), CHANNEL_PORT) != PRU_RPMSG_SUCCESS) {};
     }
 
     ~RPMsgChannel()
     {
-        delete rp_msg_;
+        delete mRPMsg;
     }
 
-    // Blocking receive
-    void tryHandleMessage(Callback callback)
+    /*
+     * Try and handle the most recent message in the queue
+     *
+     * Returns false if no message has been received
+     */
+    bool tryHandleMessage(OnMsgReceived onMsgReceived)
     {
-        /* Check register R31 bit CHANNEL_PORT to see if the ARM has kicked us */
+        // Check bit CHANNEL_PORT in register R31 to see if ARM has kicked us
         if (!(__R31 & static_cast<uint32_t>(1 << CHANNEL_PORT))) {
-            return;
+            return false;
         }
 
-        /* Clear the event status */
-        CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
+        clearEventStatus();
 
-        /*
-         * Receive available messages.
-         * Multiple messages can be sent per kick.
-         */
-        while (pru_rpmsg_receive(&transport_, &source_, &destination_, rp_msg_->payload_, &payload_length_)
-                == PRU_RPMSG_SUCCESS) {
+        // Receive available messages.
+        // The latest message in the queue will be passed to the callback function onMsgReceived
+        uint16_t source, destination, payloadLength;
+        while (pru_rpmsg_receive(&mTransport, &source, &destination, mRPMsg->payload, &payloadLength) == PRU_RPMSG_SUCCESS) {
 
-            callback(rp_msg_->shared_struct_);
-            /*
-             * Send reply message to the address that sent
-             * the initial message
-             */
-            pru_rpmsg_send(&transport_, destination_, source_, rp_msg_->payload_, sizeof(TSharedStruct));
+            onMsgReceived(mRPMsg->sharedStruct);
+
+            // Replay to the same destination
+            pru_rpmsg_send(&mTransport, destination, source, mRPMsg->payload, sizeof(TSharedStruct));
+            return true;
         }
+
+        return false;
     }
+
 private:
-    detail::RPMsg<TSharedStruct>*   rp_msg_;
-    pru_rpmsg_transport             transport_;
-    uint16_t                        source_;
-    uint16_t                        destination_;
-    uint16_t                        payload_length_;
+    /*
+     * Clear the status of the PRU-ICSS system event that the ARM will use to 'kick' us
+     */
+    void clearEventStatus()
+    {
+        // Clear the event status
+        CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
+    }
+
+    detail::RPMsg<TSharedStruct>*   mRPMsg;
+    pru_rpmsg_transport             mTransport;
 };
 
 } // namespace prucpp
