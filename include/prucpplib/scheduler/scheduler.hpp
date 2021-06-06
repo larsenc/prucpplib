@@ -20,7 +20,7 @@ struct Task
 
 
 /*
- * The run function implements a simple clock-based task scheduling strategy
+ * The run function implements a simple static clock-based task scheduling strategy
 */
 template<uint32_t PERIOD, typename TTimer, typename TTask, uint8_t NUM_TASKS>
 inline void run(TTimer& timer, TTask (&tasks)[NUM_TASKS])

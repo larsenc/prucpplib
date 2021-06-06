@@ -18,11 +18,11 @@ template<uint16_t QCAPCTL, uint32_t QUPRD>
 class EQepPositionEncoder
 {
 public:
-    EQepPositionEncoder(volatile sysPwmss& pwm_ss)
-        : pwm_ss_(pwm_ss)
+    EQepPositionEncoder(volatile sysPwmss& pwmSS)
+        : mPwmSS(pwmSS)
     {
         // Set to defaults in quadrature mode
-        pwm_ss_.EQEP_QDECCTL = 0x00;
+        mPwmSS.EQEP_QDECCTL = 0x00;
 
         // Enable unit timer                                        UTE     = 1
         // Enable capture latch on unit time out                    QCLM    = 1
@@ -35,7 +35,7 @@ public:
         //
         // 01000010001110 = 0x108E
         //
-        pwm_ss_.EQEP_QEPCTL = 0x108E;
+        mPwmSS.EQEP_QEPCTL = 0x108E;
 
 
         // Set prescalers for EQEP Capture timer and UPEVNT
@@ -43,47 +43,47 @@ public:
         // This register controls the:
         //      - UPPS - Unit position event prescaler      : bit 3-0
         //      - CCPS - eQEP capture timer clock prescaler : bit 6-4
-        pwm_ss_.EQEP_QCAPCTL = QCAPCTL;
+        mPwmSS.EQEP_QCAPCTL = QCAPCTL;
 
         // Enable EQEP Capture unit
-        pwm_ss_.EQEP_QCAPCTL |= 0x8000;
+        mPwmSS.EQEP_QCAPCTL |= 0x8000;
 
         // Enable unit time out interrupt
-        pwm_ss_.EQEP_QEINT |= 0x0800;
+        mPwmSS.EQEP_QEINT |= 0x0800;
 
         // Clear encoder count
-        pwm_ss_.EQEP_QPOSCNT_bit.QPOSCNT = 0x00000000;
+        mPwmSS.EQEP_QPOSCNT_bit.QPOSCNT = 0x00000000;
 
         // Set max encoder count
-        pwm_ss_.EQEP_QPOSMAX_bit.QPOSMAX = UINT_MAX;
+        mPwmSS.EQEP_QPOSMAX_bit.QPOSMAX = UINT_MAX;
 
         // Clear timer
-        pwm_ss_.EQEP_QUTMR_bit.QUTMR = 0x00000000;
+        mPwmSS.EQEP_QUTMR_bit.QUTMR = 0x00000000;
 
         // Set "Unit time event" period count
-        //      pwm_ss_.EQEP_QUPRD_bit.QUPRD = number of 100MHz cycles
+        //      mPwmSS.EQEP_QUPRD_bit.QUPRD = number of 100MHz cycles
         //      Formula: "dT" / (10.0 * 0.000000001)
         // "Unit time event" defines the period of sensors readings. When a new reading is available the interrupt flag
-        // EQEP_QFLG is set. When interrupt EQEP_QFLG occurs, pwm_ss_.EQEP_QPOSLAT contains the position count since last interrupt.
-        pwm_ss_.EQEP_QUPRD_bit.QUPRD = QUPRD;
+        // EQEP_QFLG is set. When interrupt EQEP_QFLG occurs, mPwmSS.EQEP_QPOSLAT contains the position count since last interrupt.
+        mPwmSS.EQEP_QUPRD_bit.QUPRD = QUPRD;
 
         // Clear all interrupt bits
         // The interrupt service routine will need to clear the global interrupt flag bit and the serviced event,
         // via the interrupt clear register (QCLR), before any other interrupt pulses are generated.
-        // Clears the interrupt bit pwm_ss_.EQEP_QFLG for example.
-        pwm_ss_.EQEP_QCLR = 0xFFFF;
+        // Clears the interrupt bit mPwmSS.EQEP_QFLG for example.
+        mPwmSS.EQEP_QCLR = 0xFFFF;
     }
 
     void readPosition(int& position) const volatile
     {
-        position = pwm_ss_.EQEP_QPOSLAT;
+        position = mPwmSS.EQEP_QPOSLAT;
     }
 
     bool overflowError() volatile
     {
         // Check the COEF bit in the status register EQEP_QEPSTS for overflow error
-        if (pwm_ss_.EQEP_QEPSTS & 0x08){
-            pwm_ss_.EQEP_QEPSTS |= 0x08;
+        if (mPwmSS.EQEP_QEPSTS & 0x08){
+            mPwmSS.EQEP_QEPSTS |= 0x08;
             return true;
         }
         return false;
@@ -92,8 +92,8 @@ public:
     bool directionError() volatile
     {
         // Check the CDEF bit in the status register EQEP_QEPSTS for direction change error
-        if (pwm_ss_.EQEP_QEPSTS & 0x10){
-            pwm_ss_.EQEP_QEPSTS |= 0x10;
+        if (mPwmSS.EQEP_QEPSTS & 0x10){
+            mPwmSS.EQEP_QEPSTS |= 0x10;
             return true;
         }
         return false;
@@ -102,15 +102,15 @@ public:
     bool positionChanged() volatile
     {
         // Checks if unit time event has occurred
-        if (pwm_ss_.EQEP_QFLG & 0x0800) {
-            pwm_ss_.EQEP_QCLR |= 0x0800;
+        if (mPwmSS.EQEP_QFLG & 0x0800) {
+            mPwmSS.EQEP_QCLR |= 0x0800;
             return true;
         }
         return false;
     }
 
 private:
-    volatile sysPwmss& pwm_ss_;
+    volatile sysPwmss& mPwmSS;
 };
 
 } // namespace detail

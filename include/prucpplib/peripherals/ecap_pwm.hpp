@@ -15,7 +15,7 @@ namespace prucpp {
 template<uint32_t PERIOD>
 struct ECAPPWM
 {
-    ECAPPWM(uint32_t numCyclesHigh = 0)
+    ECAPPWM(uint32_t cyclesHigh = 0)
     {
         // Enable APWM mode and enable asynchronous operation
         // Set polarity to active high
@@ -28,16 +28,16 @@ struct ECAPPWM
         CT_ECAP.ECCTL2 |= 0x0010;
 
         // Set the duty cycle
-        CT_ECAP.CAP2 = numCyclesHigh;
+        CT_ECAP.CAP2 = cyclesHigh;
     }
 
     /*
      * Set the duty cycle by specifying number of cycles the signal is high during a period.
      * The duty cycle is equal to: numCyclesHigh/PERIOD
      */
-    void setDutyCycle(uint32_t numCyclesHigh)
+    void setDutyCycle(uint32_t cyclesHigh)
     {
-        CT_ECAP.CAP2 = numCyclesHigh;
+        CT_ECAP.CAP2 = cyclesHigh;
     }
 };
 
