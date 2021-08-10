@@ -9,7 +9,7 @@
 namespace prucpp {
 
 template<uint8_t GPIO_MASK>
-class GPIOOutput : public GPIO<GPIOOutput<GPIO_MASK>, GPIO_MASK>
+class GPIOOutput : public GPIO<GPIOOutput, GPIO_MASK>
 {
 public:
     void setValue(bool value) volatile

@@ -9,7 +9,7 @@
 namespace prucpp {
 
 template<uint8_t GPIO_MASK>
-class GPIOInput : public GPIO<GPIOInput<GPIO_MASK>, GPIO_MASK>
+class GPIOInput : public GPIO<GPIOInput, GPIO_MASK>
 {
 public:
     volatile uint32_t& getRegister() volatile
