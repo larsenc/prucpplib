@@ -1,6 +1,8 @@
 # prucpplib
 
-The prucpp library contains a set of functions and classes that aims to make it easier to develop pru applications with c++. 
+prucpplib is a header only library that contains a set of functions and classes that aims to make it easier to develop pru applications with c++.
+
+prucpplib is being developed with AM335x processors in mind and tested on a BeagleBone Black.
 
 ## Example
 ```c++
