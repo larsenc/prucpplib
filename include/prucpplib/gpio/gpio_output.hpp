@@ -14,7 +14,8 @@ class GPIOOutput : public GPIO<GPIOOutput, BIT_NR>
 public:
     void setValue(bool value) volatile
     {
-        getRegister() = (value << BIT_NR);
+        // Branch free individual bit set. Source: https://graphics.stanford.edu/~seander/bithacks.html
+        __R30 ^= (-value ^ __R30) & GPIO<GPIOOutput, BIT_NR>::BIT_MASK;
     }
 
     volatile uint32_t& getRegister() volatile
