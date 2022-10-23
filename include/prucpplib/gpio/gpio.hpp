@@ -5,15 +5,19 @@
 
 namespace prucpp {
 
-template<template<uint8_t> class TDerived, uint8_t GPIO_MASK>
+template<template<uint8_t> class TDerived, uint8_t BIT_NR>
 class GPIO
 {
 public:
-    typedef GPIO<TDerived, GPIO_MASK> derived_type;
+    typedef TDerived<BIT_NR> derived_type;
+
+    enum {
+        BIT_MASK = 1 << BIT_NR
+    };
 
     bool readValue() const volatile
     {
-        return ((getRegister() & (1 << GPIO_MASK)) >> GPIO_MASK);
+        return ((getRegister() & BIT_MASK) >> BIT_NR);
     }
 
     volatile uint32_t& getRegister() volatile

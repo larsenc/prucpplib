@@ -8,13 +8,13 @@
 
 namespace prucpp {
 
-template<uint8_t GPIO_MASK>
-class GPIOOutput : public GPIO<GPIOOutput, GPIO_MASK>
+template<uint8_t BIT_NR>
+class GPIOOutput : public GPIO<GPIOOutput, BIT_NR>
 {
 public:
     void setValue(bool value) volatile
     {
-        getRegister() = (value << GPIO_MASK);
+        getRegister() = (value << BIT_NR);
     }
 
     volatile uint32_t& getRegister() volatile
